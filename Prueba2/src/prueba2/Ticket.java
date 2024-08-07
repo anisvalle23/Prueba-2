@@ -1,13 +1,26 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package prueba2;
 
-/**
- *
- * @author anavalle
- */
+
 public class Ticket {
-    
+
+    private String nombrePasajero;
+    private double totalPagado;
+
+    public Ticket(String nombrePasajero, double totalPagado) {
+        this.nombrePasajero = nombrePasajero;
+        this.totalPagado = totalPagado;
+    }
+
+    public String getNombrePasajero() {
+        return nombrePasajero;
+    }
+
+    public double getTotalPagado() {
+        return totalPagado;
+    }
+
+    public void print() {
+        System.out.println("Pasajero: " + nombrePasajero + ", Total Pagado: L." + totalPagado);
+    }
 }
