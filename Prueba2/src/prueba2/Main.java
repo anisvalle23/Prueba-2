@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Main {
+
     private PalindromoAir palindromoAir;
     private JFrame marco;
     private JTextArea areaDeTexto;
@@ -119,7 +120,7 @@ public class Main {
         JButton boton = new JButton(texto);
         boton.setFont(new Font("Arial", Font.BOLD, 14));
         boton.setBackground(new Color(255, 105, 180));
-        boton.setForeground(Color.BLACK); 
+        boton.setForeground(Color.BLACK);
         boton.setBorder(BorderFactory.createLineBorder(new Color(255, 20, 147), 2));
         boton.setPreferredSize(new Dimension(180, 40));
         return boton;
@@ -128,12 +129,18 @@ public class Main {
     private void venderTicket() {
         String nombre = campoNombre.getText().trim();
         if (!nombre.isEmpty()) {
-            palindromoAir.sellTicket(nombre);
-            mostrarMensaje("Ticket vendido", "Ticket vendido, nombre pasajero: " + nombre + ", precio $" + obtenerPrecio(nombre), JOptionPane.INFORMATION_MESSAGE);
-            actualizarPantalla();
+            if (nombre.matches("[a-zA-Z\\s]+")) {
+                palindromoAir.sellTicket(nombre);
+                double precio = palindromoAir.isPalindromo(nombre) ? 640 : 800;
+                mostrarMensaje("Ticket vendido", "Ticket vendido, nombre pasajero: " + nombre + ", precio $" + precio, JOptionPane.INFORMATION_MESSAGE);
+                actualizarPantalla();
+            } else {
+                mostrarMensaje("Error", "El nombre del pasajero solo puede contener letras y espacios.", JOptionPane.ERROR_MESSAGE);
+            }
         } else {
             mostrarMensaje("Error", "El nombre del pasajero no puede estar vacío.", JOptionPane.ERROR_MESSAGE);
         }
+        campoNombre.setText("");
     }
 
     private void cancelarTicket() {
@@ -149,6 +156,7 @@ public class Main {
         } else {
             mostrarMensaje("Error", "El nombre del pasajero no puede estar vacío.", JOptionPane.ERROR_MESSAGE);
         }
+        campoNombre.setText("");
     }
 
     private void buscarPasajero() {
@@ -163,14 +171,29 @@ public class Main {
         } else {
             mostrarMensaje("Error", "El nombre del pasajero no puede estar vacío.", JOptionPane.ERROR_MESSAGE);
         }
+        campoNombre.setText("");
     }
 
     private void despachar() {
+        boolean hasPassengers = false;
+        for (Ticket ticket : palindromoAir.asiento) {
+            if (ticket != null) {
+                hasPassengers = true;
+                break;
+            }
+        }
+
+        if (!hasPassengers) {
+            mostrarMensaje("Error", "No se puede despachar el avión. No hay pasajeros.", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         double ingresoTotal = palindromoAir.income();
         mostrarMensaje("Ingreso total", "Ingreso total generado: $" + ingresoTotal, JOptionPane.INFORMATION_MESSAGE);
         palindromoAir.dispatch();
         mostrarMensaje("Asientos reseteados", "Los asientos del avión han sido reseteados.", JOptionPane.INFORMATION_MESSAGE);
         actualizarPantalla();
+        campoNombre.setText("");
     }
 
     private void actualizarPantalla() {
@@ -188,14 +211,6 @@ public class Main {
         UIManager.put("Panel.background", new Color(255, 228, 225));
         UIManager.put("OptionPane.messageFont", new Font("Arial", Font.BOLD, 14));
         JOptionPane.showMessageDialog(marco, mensaje, titulo, tipo);
-    }
-
-    private double obtenerPrecio(String nombre) {
-        double precio = 800;
-        if (palindromoAir.isPalindromo(nombre)) {
-            precio *= 0.8;
-        }
-        return precio;
     }
 
     public static void main(String[] args) {

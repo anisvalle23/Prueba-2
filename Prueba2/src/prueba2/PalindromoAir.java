@@ -1,9 +1,6 @@
-
 package prueba2;
 
-
 public class PalindromoAir {
-
 
     Ticket[] asiento;
 
@@ -26,21 +23,22 @@ public class PalindromoAir {
     }
 
     public int searchPassenger(String name) {
-        return searchPassenger(name, 0);
+        return searchPassenger(name.toLowerCase(), 0);
     }
 
     private int searchPassenger(String name, int index) {
         if (index >= asiento.length) {
             return -1;
         }
-        if (asiento[index] != null && asiento[index].getNombrePasajero().equals(name)) {
+        if (asiento[index] != null && asiento[index].getNombrePasajero().toLowerCase().equals(name)) {
             return index;
         }
         return searchPassenger(name, index + 1);
     }
 
     public boolean isPalindromo(String name) {
-        return isPalindromo(name, 0, name.length() - 1);
+        String lowerCaseName = name.toLowerCase();
+        return isPalindromo(lowerCaseName, 0, lowerCaseName.length() - 1);
     }
 
     private boolean isPalindromo(String name, int start, int end) {
@@ -110,7 +108,7 @@ public class PalindromoAir {
     }
 
     public boolean cancelTicket(String name) {
-        int posicion = searchPassenger(name);
+        int posicion = searchPassenger(name.toLowerCase());
         if (posicion == -1) {
             return false;
         }
@@ -120,6 +118,19 @@ public class PalindromoAir {
     }
 
     public void dispatch() {
+        boolean hasPassengers = false;
+        for (Ticket ticket : asiento) {
+            if (ticket != null) {
+                hasPassengers = true;
+                break;
+            }
+        }
+
+        if (!hasPassengers) {
+            System.out.println("No se puede despachar el avión. No hay pasajeros.");
+            return;
+        }
+
         System.out.println("Ingreso total generado: $." + income());
         reset();
         System.out.println("Los asientos del avion han sido reseteados.");

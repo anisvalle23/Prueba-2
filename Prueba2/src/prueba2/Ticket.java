@@ -1,4 +1,5 @@
 package prueba2;
+
 public class Ticket {
 
     private String nombrePasajero;
@@ -18,6 +19,6 @@ public class Ticket {
     }
 
     public void print() {
-        System.out.println("Pasajero: " + nombrePasajero + ", Total Pagado: L." + totalPagado);
+        System.out.println("Pasajero: " + nombrePasajero + ", Total Pagado: $." + totalPagado);
     }
 }
