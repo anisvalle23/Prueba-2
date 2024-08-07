@@ -1,7 +1,4 @@
-
 package prueba2;
-
-
 public class Ticket {
 
     private String nombrePasajero;
